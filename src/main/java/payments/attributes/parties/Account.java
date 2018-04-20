@@ -21,14 +21,14 @@ public class Account {
         this.number = number;
     }
 
-    public Account(String fullName, String number, String numberCode) {
-        this.name = this.getFirstInitialWithLastName(fullName);
+    public Account(String name, String number, String numberCode) {
+        this.name = name;
         this.number = number;
         this.numberCode = numberCode;
     }
 
-    public Account(String fullName, String number, String numberCode, int type) {
-        this.name = this.getFirstInitialWithLastName(fullName);
+    public Account(String name, String number, String numberCode, int type) {
+        this.name = name;
         this.number = number;
         this.numberCode = numberCode;
         this.type = type;
@@ -48,22 +48,5 @@ public class Account {
 
     public int getType() {
         return type;
-    }
-
-    private String getFirstInitialWithLastName(String fullName) {
-        if (fullName == null) {
-            return null;
-        }
-
-        String[] components = fullName.split(" ");
-
-        if (components.length == 1) {
-            return fullName;
-        } else {
-            char initial = components[0].charAt(0);
-            String last = components[components.length - 1];
-
-            return String.format("%c %s", initial, last);
-        }
     }
 }

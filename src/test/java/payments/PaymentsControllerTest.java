@@ -45,7 +45,7 @@ public class PaymentsControllerTest {
         String address = "42 Main St London EC42 G4D";
         Amount amount = new Amount(BigInteger.valueOf(2), 56, Currency.GBP);
 
-        Account beneficiaryAccount = new Account(fullName, "accNum", "accCode", 42);
+        Account beneficiaryAccount = new Account("F Last", "accNum", "accCode", 42);
         Bank beneficiaryBank = new Bank("beneficiaryBankId", "beneficiaryBankIdCode");
         Party beneficiary = new Party(beneficiaryAccount, address, beneficiaryBank, fullName);
         this.partyRepository.save(beneficiary);
