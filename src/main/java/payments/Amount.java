@@ -32,6 +32,6 @@ public class Amount {
 
     @Override
     public String toString() {
-        return String.format("%d.%2d", this.majorUnits, this.minorUnits);
+        return String.format("%s.%2d", this.majorUnits.toString(), this.minorUnits);
     }
 }

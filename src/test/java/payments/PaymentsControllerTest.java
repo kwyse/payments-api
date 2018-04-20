@@ -46,6 +46,8 @@ public class PaymentsControllerTest {
     public void getSinglePayment() throws Exception {
         this.mockMvc.perform(get("/payments/" + this.payment.getId()))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.attributes.amount", is(payment.getAttributes().getAmount().toString())))
+                .andExpect(jsonPath("$.attributes.currency", is(payment.getAttributes().getAmount().getCurrency().toString())))
                 .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
     }
 }
