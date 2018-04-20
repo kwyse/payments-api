@@ -1,7 +1,6 @@
-package payments;
+package payments.attributes.parties;
 
 import org.junit.Test;
-import payments.attributes.parties.Account;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
