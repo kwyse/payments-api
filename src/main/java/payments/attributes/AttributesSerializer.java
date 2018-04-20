@@ -24,6 +24,7 @@ public class AttributesSerializer extends StdSerializer<Attributes> {
         gen.writeStringField("amount", value.getAmount().toString());
         gen.writeStringField("currency", String.valueOf(value.getAmount().getCurrency()));
         gen.writeObjectField("beneficiary_party", value.getParties().getBeneficiary());
+        gen.writeObjectField("debtor_party", value.getParties().getDebtor());
         gen.writeObjectField("sponsor_party", value.getParties().getSponsor());
 
         gen.writeEndObject();

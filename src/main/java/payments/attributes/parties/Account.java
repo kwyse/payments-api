@@ -21,6 +21,12 @@ public class Account {
         this.number = number;
     }
 
+    public Account(String fullName, String number, String numberCode) {
+        this.name = this.getFirstInitialWithLastName(fullName);
+        this.number = number;
+        this.numberCode = numberCode;
+    }
+
     public Account(String fullName, String number, String numberCode, int type) {
         this.name = this.getFirstInitialWithLastName(fullName);
         this.number = number;

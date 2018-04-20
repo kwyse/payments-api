@@ -50,12 +50,17 @@ public class PaymentsControllerTest {
         Party beneficiary = new Party(beneficiaryAccount, address, beneficiaryBank, fullName);
         this.partyRepository.save(beneficiary);
 
+        Account debtorAccount = new Account("debtorName", "debtorAccNum", "debtorCode");
+        Bank debtorBank = new Bank("debtorBankId", "debtorBankIdCode");
+        Party debtor = new Party(debtorAccount, "111 The Circle", debtorBank, "Debt Name");
+        this.partyRepository.save(debtor);
+
         Account sponsorAccount = new Account("sponsorAccNum");
         Bank sponsorBank = new Bank("sponsorBankId", "sponsorBankIdCode");
         Party sponsor = new Party(sponsorAccount, sponsorBank);
         this.partyRepository.save(sponsor);
 
-        Parties parties = new Parties(beneficiary, sponsor);
+        Parties parties = new Parties(beneficiary, debtor, sponsor);
         Attributes attributes = new Attributes(amount, parties);
         payment = new Payment(attributes);
 
@@ -92,6 +97,25 @@ public class PaymentsControllerTest {
 
                 .andExpect(jsonPath("$.attributes.beneficiary_party.name",
                         is(payment.getAttributes().getParties().getBeneficiary().getName())))
+
+                // Debtor party
+                .andExpect(jsonPath("$.attributes.debtor_party.account_name",
+                        is(payment.getAttributes().getParties().getDebtor().getAccount().getName())))
+                .andExpect(jsonPath("$.attributes.debtor_party.account_number",
+                        is(payment.getAttributes().getParties().getDebtor().getAccount().getNumber())))
+                .andExpect(jsonPath("$.attributes.debtor_party.account_number_code",
+                        is(payment.getAttributes().getParties().getDebtor().getAccount().getNumberCode())))
+
+                .andExpect(jsonPath("$.attributes.debtor_party.address",
+                        is(payment.getAttributes().getParties().getDebtor().getAddress())))
+
+                .andExpect(jsonPath("$.attributes.debtor_party.bank_id",
+                        is(payment.getAttributes().getParties().getDebtor().getBank().getId())))
+                .andExpect(jsonPath("$.attributes.debtor_party.bank_id_code",
+                        is(payment.getAttributes().getParties().getDebtor().getBank().getIdCode())))
+
+                .andExpect(jsonPath("$.attributes.debtor_party.name",
+                        is(payment.getAttributes().getParties().getDebtor().getName())))
 
                 // Sponsor party
                 .andExpect(jsonPath("$.attributes.sponsor_party.account_number",
