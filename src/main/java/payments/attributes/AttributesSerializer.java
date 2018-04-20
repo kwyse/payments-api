@@ -3,7 +3,6 @@ package payments.attributes;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import payments.attributes.Attributes;
 
 import java.io.IOException;
 
@@ -25,6 +24,7 @@ public class AttributesSerializer extends StdSerializer<Attributes> {
         gen.writeStringField("amount", value.getAmount().toString());
         gen.writeStringField("currency", String.valueOf(value.getAmount().getCurrency()));
         gen.writeObjectField("beneficiary_party", value.getParties().getBeneficiary());
+        gen.writeObjectField("sponsor_party", value.getParties().getSponsor());
 
         gen.writeEndObject();
     }

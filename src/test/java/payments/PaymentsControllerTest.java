@@ -13,10 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 import payments.attributes.Amount;
 import payments.attributes.Attributes;
 import payments.attributes.Currency;
-import payments.attributes.parties.Account;
-import payments.attributes.parties.Bank;
-import payments.attributes.parties.Parties;
-import payments.attributes.parties.Party;
+import payments.attributes.parties.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,6 +31,8 @@ public class PaymentsControllerTest {
     @Autowired
     private PaymentsRepository paymentsRepository;
     @Autowired
+    private PartyRepository partyRepository;
+    @Autowired
     private WebApplicationContext context;
 
     private Payment payment;
@@ -44,10 +43,18 @@ public class PaymentsControllerTest {
 
         String fullName = "First Middle Last";
         Amount amount = new Amount(BigInteger.valueOf(2), 56, Currency.GBP);
-        Account account = new Account(fullName, "accNum", "accCode", 42);
-        Bank bank = new Bank("bankId", "bankIdCode");
-        Party beneficiary = new Party(fullName, account, bank);
-        Parties parties = new Parties(beneficiary);
+
+        Account beneficiaryAccount = new Account(fullName, "accNum", "accCode", 42);
+        Bank beneficiaryBank = new Bank("beneficiaryBankId", "beneficiaryBankIdCode");
+        Party beneficiary = new Party(fullName, beneficiaryAccount, beneficiaryBank);
+        this.partyRepository.save(beneficiary);
+
+        Account sponsorAccount = new Account("sponsorAccNum");
+        Bank sponsorBank = new Bank("sponsorBankId", "sponsorBankIdCode");
+        Party sponsor = new Party(sponsorAccount, sponsorBank);
+        this.partyRepository.save(sponsor);
+
+        Parties parties = new Parties(beneficiary, sponsor);
         Attributes attributes = new Attributes(amount, parties);
         payment = new Payment(attributes);
 
@@ -61,10 +68,10 @@ public class PaymentsControllerTest {
 
                 .andExpect(jsonPath("$.attributes.amount",
                         is(payment.getAttributes().getAmount().toString())))
-
                 .andExpect(jsonPath("$.attributes.currency",
                         is(payment.getAttributes().getAmount().getCurrency().toString())))
 
+                // Beneficiary party
                 .andExpect(jsonPath("$.attributes.beneficiary_party.name",
                         is(payment.getAttributes().getParties().getBeneficiary().getName())))
 
@@ -81,6 +88,14 @@ public class PaymentsControllerTest {
                         is(payment.getAttributes().getParties().getBeneficiary().getBank().getId())))
                 .andExpect(jsonPath("$.attributes.beneficiary_party.bank_id_code",
                         is(payment.getAttributes().getParties().getBeneficiary().getBank().getIdCode())))
+
+                // Sponsor party
+                .andExpect(jsonPath("$.attributes.sponsor_party.account_number",
+                        is(payment.getAttributes().getParties().getSponsor().getAccount().getNumber())))
+                .andExpect(jsonPath("$.attributes.sponsor_party.bank_id",
+                        is(payment.getAttributes().getParties().getSponsor().getBank().getId())))
+                .andExpect(jsonPath("$.attributes.sponsor_party.bank_id_code",
+                        is(payment.getAttributes().getParties().getSponsor().getBank().getIdCode())))
 
                 .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
     }

@@ -1,21 +1,28 @@
 package payments.attributes.parties;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import javax.persistence.OneToOne;
 
 @Embeddable
 public class Parties {
-    @Embedded
+    @OneToOne
     private Party beneficiary;
+    @OneToOne
+    private Party sponsor;
 
     public Parties() {
     }
 
-    public Parties(Party beneficiary) {
+    public Parties(Party beneficiary, Party sponsor) {
         this.beneficiary = beneficiary;
+        this.sponsor = sponsor;
     }
 
     public Party getBeneficiary() {
-        return beneficiary;
+        return this.beneficiary;
+    }
+
+    public Party getSponsor() {
+        return this.sponsor;
     }
 }

@@ -17,6 +17,10 @@ public class Account {
     public Account() {
     }
 
+    public Account(String number) {
+        this.number = number;
+    }
+
     public Account(String fullName, String number, String numberCode, int type) {
         this.name = this.getFirstInitialWithLastName(fullName);
         this.number = number;
