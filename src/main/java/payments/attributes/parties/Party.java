@@ -16,9 +16,10 @@ public class Party {
     @JsonIgnore
     private long id;
 
-    private String name;
     private Account account;
+    private String address;
     private Bank bank;
+    private String name;
 
     public Party() {
     }
@@ -28,25 +29,30 @@ public class Party {
         this.bank = bank;
     }
 
-    public Party(String name, Account account, Bank bank) {
-        this.name = name;
+    public Party(Account account, String address, Bank bank, String name) {
         this.account = account;
+        this.address = address;
         this.bank = bank;
+        this.name = name;
     }
 
     public long getId() {
         return id;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     public Account getAccount() {
         return account;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     public Bank getBank() {
         return bank;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

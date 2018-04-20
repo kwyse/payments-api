@@ -42,11 +42,12 @@ public class PaymentsControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 
         String fullName = "First Middle Last";
+        String address = "42 Main St London EC42 G4D";
         Amount amount = new Amount(BigInteger.valueOf(2), 56, Currency.GBP);
 
         Account beneficiaryAccount = new Account(fullName, "accNum", "accCode", 42);
         Bank beneficiaryBank = new Bank("beneficiaryBankId", "beneficiaryBankIdCode");
-        Party beneficiary = new Party(fullName, beneficiaryAccount, beneficiaryBank);
+        Party beneficiary = new Party(beneficiaryAccount, address, beneficiaryBank, fullName);
         this.partyRepository.save(beneficiary);
 
         Account sponsorAccount = new Account("sponsorAccNum");
@@ -72,9 +73,6 @@ public class PaymentsControllerTest {
                         is(payment.getAttributes().getAmount().getCurrency().toString())))
 
                 // Beneficiary party
-                .andExpect(jsonPath("$.attributes.beneficiary_party.name",
-                        is(payment.getAttributes().getParties().getBeneficiary().getName())))
-
                 .andExpect(jsonPath("$.attributes.beneficiary_party.account_name",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getName())))
                 .andExpect(jsonPath("$.attributes.beneficiary_party.account_number",
@@ -84,10 +82,16 @@ public class PaymentsControllerTest {
                 .andExpect(jsonPath("$.attributes.beneficiary_party.account_type",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getType())))
 
+                .andExpect(jsonPath("$.attributes.beneficiary_party.address",
+                        is(payment.getAttributes().getParties().getBeneficiary().getAddress())))
+
                 .andExpect(jsonPath("$.attributes.beneficiary_party.bank_id",
                         is(payment.getAttributes().getParties().getBeneficiary().getBank().getId())))
                 .andExpect(jsonPath("$.attributes.beneficiary_party.bank_id_code",
                         is(payment.getAttributes().getParties().getBeneficiary().getBank().getIdCode())))
+
+                .andExpect(jsonPath("$.attributes.beneficiary_party.name",
+                        is(payment.getAttributes().getParties().getBeneficiary().getName())))
 
                 // Sponsor party
                 .andExpect(jsonPath("$.attributes.sponsor_party.account_number",

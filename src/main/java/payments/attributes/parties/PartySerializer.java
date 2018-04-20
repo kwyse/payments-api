@@ -26,6 +26,8 @@ public class PartySerializer extends StdSerializer<Party> {
         gen.writeStringField("account_number_code", value.getAccount().getNumberCode());
         gen.writeNumberField("account_type", value.getAccount().getType());
 
+        gen.writeStringField("address", value.getAddress());
+
         gen.writeStringField("bank_id", value.getBank().getId());
         gen.writeStringField("bank_id_code", value.getBank().getIdCode());
 
