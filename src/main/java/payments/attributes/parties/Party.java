@@ -12,13 +12,15 @@ import javax.persistence.Embeddable;
 public class Party {
     private String name;
     private Account account;
+    private Bank bank;
 
     public Party() {
     }
 
-    public Party(String name, Account account) {
+    public Party(String name, Account account, Bank bank) {
         this.name = name;
         this.account = account;
+        this.bank = bank;
     }
 
     public String getName() {
@@ -27,5 +29,9 @@ public class Party {
 
     public Account getAccount() {
         return account;
+    }
+
+    public Bank getBank() {
+        return bank;
     }
 }

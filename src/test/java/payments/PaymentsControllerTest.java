@@ -14,6 +14,7 @@ import payments.attributes.Amount;
 import payments.attributes.Attributes;
 import payments.attributes.Currency;
 import payments.attributes.parties.Account;
+import payments.attributes.parties.Bank;
 import payments.attributes.parties.Parties;
 import payments.attributes.parties.Party;
 
@@ -43,8 +44,9 @@ public class PaymentsControllerTest {
 
         String fullName = "First Middle Last";
         Amount amount = new Amount(BigInteger.valueOf(2), 56, Currency.GBP);
-        Account account = new Account(fullName, "accNum", "code", 42);
-        Party beneficiary = new Party(fullName, account);
+        Account account = new Account(fullName, "accNum", "accCode", 42);
+        Bank bank = new Bank("bankId", "bankIdCode");
+        Party beneficiary = new Party(fullName, account, bank);
         Parties parties = new Parties(beneficiary);
         Attributes attributes = new Attributes(amount, parties);
         payment = new Payment(attributes);
@@ -68,15 +70,17 @@ public class PaymentsControllerTest {
 
                 .andExpect(jsonPath("$.attributes.beneficiary_party.account_name",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getName())))
-
                 .andExpect(jsonPath("$.attributes.beneficiary_party.account_number",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getNumber())))
-
                 .andExpect(jsonPath("$.attributes.beneficiary_party.account_number_code",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getNumberCode())))
-
                 .andExpect(jsonPath("$.attributes.beneficiary_party.account_type",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getType())))
+
+                .andExpect(jsonPath("$.attributes.beneficiary_party.bank_id",
+                        is(payment.getAttributes().getParties().getBeneficiary().getBank().getId())))
+                .andExpect(jsonPath("$.attributes.beneficiary_party.bank_id_code",
+                        is(payment.getAttributes().getParties().getBeneficiary().getBank().getIdCode())))
 
                 .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
     }
