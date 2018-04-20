@@ -35,8 +35,10 @@ public class PaymentsControllerTest {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 
+        String fullName = "First Middle Last";
         Amount amount = new Amount(BigInteger.valueOf(2), 56, Currency.GBP);
-        Party beneficiary = new Party("name");
+        Account account = new Account(fullName);
+        Party beneficiary = new Party(fullName, account);
         Parties parties = new Parties(beneficiary);
         Attributes attributes = new Attributes(amount, parties);
         payment = new Payment(attributes);
@@ -57,6 +59,9 @@ public class PaymentsControllerTest {
 
                 .andExpect(jsonPath("$.attributes.beneficiary_party.name",
                         is(payment.getAttributes().getParties().getBeneficiary().getName())))
+
+                .andExpect(jsonPath("$.attributes.beneficiary_party.account_name",
+                        is(payment.getAttributes().getParties().getBeneficiary().getAccount().getName())))
 
                 .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
     }
