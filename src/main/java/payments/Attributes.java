@@ -14,14 +14,22 @@ public class Attributes {
     @Embedded
     private Amount amount;
 
+    @Embedded
+    private Parties parties;
+
     public Attributes() {
     }
 
-    Attributes(Amount amount) {
+    Attributes(Amount amount, Parties parties) {
         this.amount = amount;
+        this.parties = parties;
     }
 
     public Amount getAmount() {
         return amount;
+    }
+
+    public Parties getParties() {
+        return parties;
     }
 }

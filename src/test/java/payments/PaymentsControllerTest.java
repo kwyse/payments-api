@@ -36,7 +36,9 @@ public class PaymentsControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 
         Amount amount = new Amount(BigInteger.valueOf(2), 56, Currency.GBP);
-        Attributes attributes = new Attributes(amount);
+        Party beneficiary = new Party("name");
+        Parties parties = new Parties(beneficiary);
+        Attributes attributes = new Attributes(amount, parties);
         payment = new Payment(attributes);
 
         this.paymentsRepository.save(payment);
@@ -46,8 +48,16 @@ public class PaymentsControllerTest {
     public void getSinglePayment() throws Exception {
         this.mockMvc.perform(get("/payments/" + this.payment.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.attributes.amount", is(payment.getAttributes().getAmount().toString())))
-                .andExpect(jsonPath("$.attributes.currency", is(payment.getAttributes().getAmount().getCurrency().toString())))
+
+                .andExpect(jsonPath("$.attributes.amount",
+                        is(payment.getAttributes().getAmount().toString())))
+
+                .andExpect(jsonPath("$.attributes.currency",
+                        is(payment.getAttributes().getAmount().getCurrency().toString())))
+
+                .andExpect(jsonPath("$.attributes.beneficiary_party.name",
+                        is(payment.getAttributes().getParties().getBeneficiary().getName())))
+
                 .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
     }
 }
