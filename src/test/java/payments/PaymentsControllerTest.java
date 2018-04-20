@@ -10,6 +10,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import payments.attributes.Amount;
+import payments.attributes.Attributes;
+import payments.attributes.Currency;
+import payments.attributes.parties.Account;
+import payments.attributes.parties.Parties;
+import payments.attributes.parties.Party;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

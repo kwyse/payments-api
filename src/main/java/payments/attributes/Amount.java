@@ -1,4 +1,4 @@
-package payments;
+package payments.attributes;
 
 import javax.persistence.Embeddable;
 import java.math.BigInteger;
@@ -12,7 +12,7 @@ public class Amount {
     public Amount() {
     }
 
-    Amount(BigInteger majorUnits, int minorUnits, Currency currency) {
+    public Amount(BigInteger majorUnits, int minorUnits, Currency currency) {
         this.majorUnits = majorUnits;
         this.minorUnits = minorUnits;
         this.currency = currency;

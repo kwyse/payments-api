@@ -2,6 +2,7 @@ package payments;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import payments.attributes.Attributes;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;

@@ -1,8 +1,9 @@
-package payments;
+package payments.attributes;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import payments.attributes.Attributes;
 
 import java.io.IOException;
 

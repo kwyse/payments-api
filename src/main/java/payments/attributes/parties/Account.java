@@ -1,4 +1,4 @@
-package payments;
+package payments.attributes.parties;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

@@ -1,4 +1,4 @@
-package payments;
+package payments.attributes.parties;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

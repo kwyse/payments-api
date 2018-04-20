@@ -1,4 +1,4 @@
-package payments;
+package payments.attributes;
 
 public enum Currency {
     GBP,

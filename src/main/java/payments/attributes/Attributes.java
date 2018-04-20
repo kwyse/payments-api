@@ -1,8 +1,9 @@
-package payments;
+package payments.attributes;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import payments.attributes.parties.Parties;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -20,7 +21,7 @@ public class Attributes {
     public Attributes() {
     }
 
-    Attributes(Amount amount, Parties parties) {
+    public Attributes(Amount amount, Parties parties) {
         this.amount = amount;
         this.parties = parties;
     }
