@@ -37,7 +37,7 @@ public class PaymentsControllerTest {
 
         String fullName = "First Middle Last";
         Amount amount = new Amount(BigInteger.valueOf(2), 56, Currency.GBP);
-        Account account = new Account(fullName);
+        Account account = new Account(fullName, "accNum", "code", 42);
         Party beneficiary = new Party(fullName, account);
         Parties parties = new Parties(beneficiary);
         Attributes attributes = new Attributes(amount, parties);
@@ -62,6 +62,15 @@ public class PaymentsControllerTest {
 
                 .andExpect(jsonPath("$.attributes.beneficiary_party.account_name",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getName())))
+
+                .andExpect(jsonPath("$.attributes.beneficiary_party.account_number",
+                        is(payment.getAttributes().getParties().getBeneficiary().getAccount().getNumber())))
+
+                .andExpect(jsonPath("$.attributes.beneficiary_party.account_number_code",
+                        is(payment.getAttributes().getParties().getBeneficiary().getAccount().getNumberCode())))
+
+                .andExpect(jsonPath("$.attributes.beneficiary_party.account_type",
+                        is(payment.getAttributes().getParties().getBeneficiary().getAccount().getType())))
 
                 .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
     }
