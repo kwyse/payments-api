@@ -21,6 +21,7 @@ import payments.attributes.details.PaymentDetailsScheme;
 import payments.attributes.details.PaymentDetailsType;
 import payments.attributes.parties.*;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,6 +51,7 @@ public class PaymentsControllerTest {
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        this.paymentsRepository.deleteAllInBatch();
 
         String fullName = "First Middle Last";
         String address = "42 Main St London EC42 G4D";
@@ -186,12 +188,21 @@ public class PaymentsControllerTest {
                 .andExpect(jsonPath("$.payment.attributes.processing_date",
                         is(dateFormat.format(payment.getAttributes().getProcessingDate()))))
 
-                .andExpect(jsonPath("$.payment.id", is(String.valueOf(payment.getId()))));
+                .andExpect(jsonPath("$.payment.id", is(this.payment.getId().toString())))
+                .andExpect(jsonPath("$.links[0].href", containsString("/payments/" + this.payment.getId())));
     }
 
     @Test
     public void getSinglePaymentThatDoesNotExist() throws Exception {
         this.mockMvc.perform(get("/payments/" + UUID.randomUUID()))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getListOfPayments() throws Exception {
+        this.mockMvc.perform(get("/payments"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.links[0].href", containsString("/payments")))
+                .andExpect(jsonPath("$.content[0].payment.id", is(this.payment.getId().toString())));
     }
 }

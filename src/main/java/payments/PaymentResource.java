@@ -8,7 +8,9 @@ public class PaymentResource extends ResourceSupport {
 
     public PaymentResource(Payment payment) {
         this.payment = payment;
-        this.add(linkTo(PaymentsController.class).withSelfRel());
+        this.add(linkTo(PaymentsController.class)
+                .slash(payment.getId())
+                .withSelfRel());
     }
 
     public Payment getPayment() {
