@@ -7,9 +7,14 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'jacoco'
+apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
+
+jacoco {
+    toolVersion = '0.8.1'
+}
 
 repositories {
     mavenCentral()
