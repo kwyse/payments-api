@@ -5,6 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,10 +27,13 @@ import payments.attributes.parties.*;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -46,48 +53,25 @@ public class PaymentsControllerTest {
     @Autowired
     private WebApplicationContext context;
 
+    private HttpMessageConverter jsonMapper;
+    private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType());
+
     private Payment payment;
+
+    @Autowired
+    void setConverters(HttpMessageConverter<?>[] converters) {
+        this.jsonMapper = Arrays.stream(converters)
+                .filter(messageConverter -> messageConverter instanceof MappingJackson2HttpMessageConverter)
+                .findAny()
+                .orElse(null);
+    }
 
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         this.paymentsRepository.deleteAllInBatch();
 
-        String fullName = "First Middle Last";
-        String address = "42 Main St London EC42 G4D";
-        Amount amount = new Amount(BigInteger.valueOf(2), 56, Currency.GBP);
-
-        Account beneficiaryAccount = new Account("F Last", "accNum", "accCode", 42);
-        Bank beneficiaryBank = new Bank("beneficiaryBankId", "beneficiaryBankIdCode");
-        Party beneficiary = new Party(beneficiaryAccount, address, beneficiaryBank, fullName);
-        this.partyRepository.save(beneficiary);
-
-        Account debtorAccount = new Account("debtorName", "debtorAccNum", "debtorCode");
-        Bank debtorBank = new Bank("debtorBankId", "debtorBankIdCode");
-        Party debtor = new Party(debtorAccount, "111 The Circle", debtorBank, "Debt Name");
-        this.partyRepository.save(debtor);
-
-        Account sponsorAccount = new Account("sponsorAccNum");
-        Bank sponsorBank = new Bank("sponsorBankId", "sponsorBankIdCode");
-        Party sponsor = new Party(sponsorAccount, sponsorBank);
-        this.partyRepository.save(sponsor);
-
-        Parties parties = new Parties(beneficiary, debtor, sponsor);
-        References references = new References("rootRef", "e2eRef", "numRef");
-        Date processingDate = new GregorianCalendar(2017, Calendar.JANUARY, 24).getTime();
-        PaymentDetails paymentDetails = new PaymentDetails("payId", "payPurpose", PaymentDetailsScheme.FPS, PaymentDetailsType.Credit);
-
-        List<Amount> senderAmounts = Arrays.asList(
-                new Amount(BigInteger.valueOf(5), 0, Currency.GBP),
-                new Amount(BigInteger.valueOf(10), 0, Currency.GBP)
-        );
-        Amount receiverAmount = new Amount(BigInteger.valueOf(1), 0, Currency.GBP);
-        Charges charges = new Charges("bearerCode", senderAmounts, receiverAmount);
-        this.chargesRepository.save(charges);
-
-        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, charges);
-        payment = new Payment(attributes);
-
+        payment = this.generatePayment();
         this.paymentsRepository.save(payment);
     }
 
@@ -204,5 +188,60 @@ public class PaymentsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.links[0].href", containsString("/payments")))
                 .andExpect(jsonPath("$.content[0].payment.id", is(this.payment.getId().toString())));
+    }
+
+    @Test
+    public void createNewPayment() throws Exception {
+        Payment payment = new Payment();
+        String paymentJson = this.encodeToJson(payment);
+
+        long entityCount = this.paymentsRepository.count();
+        this.mockMvc.perform(post("/payments").contentType(this.contentType).content(paymentJson))
+                .andExpect(status().isCreated());
+
+        assertEquals(entityCount + 1, this.paymentsRepository.count());
+    }
+
+    private String encodeToJson(Object o) throws IOException {
+        MockHttpOutputMessage message = new MockHttpOutputMessage();
+        this.jsonMapper.write(o, MediaType.APPLICATION_JSON, message);
+        return message.getBodyAsString();
+    }
+
+    private Payment generatePayment() {
+        String fullName = "First Middle Last";
+        String address = "42 Main St London EC42 G4D";
+        Amount amount = new Amount(BigInteger.valueOf(2), 56, Currency.GBP);
+
+        Account beneficiaryAccount = new Account("F Last", "accNum", "accCode", 42);
+        Bank beneficiaryBank = new Bank("beneficiaryBankId", "beneficiaryBankIdCode");
+        Party beneficiary = new Party(beneficiaryAccount, address, beneficiaryBank, fullName);
+        this.partyRepository.save(beneficiary);
+
+        Account debtorAccount = new Account("debtorName", "debtorAccNum", "debtorCode");
+        Bank debtorBank = new Bank("debtorBankId", "debtorBankIdCode");
+        Party debtor = new Party(debtorAccount, "111 The Circle", debtorBank, "Debt Name");
+        this.partyRepository.save(debtor);
+
+        Account sponsorAccount = new Account("sponsorAccNum");
+        Bank sponsorBank = new Bank("sponsorBankId", "sponsorBankIdCode");
+        Party sponsor = new Party(sponsorAccount, sponsorBank);
+        this.partyRepository.save(sponsor);
+
+        Parties parties = new Parties(beneficiary, debtor, sponsor);
+        References references = new References("rootRef", "e2eRef", "numRef");
+        Date processingDate = new GregorianCalendar(2017, Calendar.JANUARY, 24).getTime();
+        PaymentDetails paymentDetails = new PaymentDetails("payId", "payPurpose", PaymentDetailsScheme.FPS, PaymentDetailsType.Credit);
+
+        List<Amount> senderAmounts = Arrays.asList(
+                new Amount(BigInteger.valueOf(5), 10, Currency.GBP),
+                new Amount(BigInteger.valueOf(10), 20, Currency.GBP)
+        );
+        Amount receiverAmount = new Amount(BigInteger.valueOf(1), 30, Currency.GBP);
+        Charges charges = new Charges("bearerCode", senderAmounts, receiverAmount);
+        this.chargesRepository.save(charges);
+
+        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, charges);
+        return new Payment(attributes);
     }
 }

@@ -9,7 +9,7 @@ import java.math.BigInteger;
 @JsonSerialize(using = AmountSerializer.class)
 public class Amount {
     private BigInteger majorUnits;
-    private int minorUnits;
+    private Integer minorUnits;
     private Currency currency;
 
     public Amount() {
