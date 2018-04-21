@@ -96,97 +96,97 @@ public class PaymentsControllerTest {
         this.mockMvc.perform(get("/payments/" + this.payment.getId()))
                 .andExpect(status().isOk())
 
-                .andExpect(jsonPath("$.attributes.amount",
+                .andExpect(jsonPath("$.payment.attributes.amount",
                         is(payment.getAttributes().getAmount().toString())))
-                .andExpect(jsonPath("$.attributes.currency",
+                .andExpect(jsonPath("$.payment.attributes.currency",
                         is(payment.getAttributes().getAmount().getCurrency().toString())))
 
                 // Beneficiary party
-                .andExpect(jsonPath("$.attributes.beneficiary_party.account_name",
+                .andExpect(jsonPath("$.payment.attributes.beneficiary_party.account_name",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getName())))
-                .andExpect(jsonPath("$.attributes.beneficiary_party.account_number",
+                .andExpect(jsonPath("$.payment.attributes.beneficiary_party.account_number",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getNumber())))
-                .andExpect(jsonPath("$.attributes.beneficiary_party.account_number_code",
+                .andExpect(jsonPath("$.payment.attributes.beneficiary_party.account_number_code",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getNumberCode())))
-                .andExpect(jsonPath("$.attributes.beneficiary_party.account_type",
+                .andExpect(jsonPath("$.payment.attributes.beneficiary_party.account_type",
                         is(payment.getAttributes().getParties().getBeneficiary().getAccount().getType())))
 
-                .andExpect(jsonPath("$.attributes.beneficiary_party.address",
+                .andExpect(jsonPath("$.payment.attributes.beneficiary_party.address",
                         is(payment.getAttributes().getParties().getBeneficiary().getAddress())))
 
-                .andExpect(jsonPath("$.attributes.beneficiary_party.bank_id",
+                .andExpect(jsonPath("$.payment.attributes.beneficiary_party.bank_id",
                         is(payment.getAttributes().getParties().getBeneficiary().getBank().getId())))
-                .andExpect(jsonPath("$.attributes.beneficiary_party.bank_id_code",
+                .andExpect(jsonPath("$.payment.attributes.beneficiary_party.bank_id_code",
                         is(payment.getAttributes().getParties().getBeneficiary().getBank().getIdCode())))
 
-                .andExpect(jsonPath("$.attributes.beneficiary_party.name",
+                .andExpect(jsonPath("$.payment.attributes.beneficiary_party.name",
                         is(payment.getAttributes().getParties().getBeneficiary().getName())))
 
                 // Debtor party
-                .andExpect(jsonPath("$.attributes.debtor_party.account_name",
+                .andExpect(jsonPath("$.payment.attributes.debtor_party.account_name",
                         is(payment.getAttributes().getParties().getDebtor().getAccount().getName())))
-                .andExpect(jsonPath("$.attributes.debtor_party.account_number",
+                .andExpect(jsonPath("$.payment.attributes.debtor_party.account_number",
                         is(payment.getAttributes().getParties().getDebtor().getAccount().getNumber())))
-                .andExpect(jsonPath("$.attributes.debtor_party.account_number_code",
+                .andExpect(jsonPath("$.payment.attributes.debtor_party.account_number_code",
                         is(payment.getAttributes().getParties().getDebtor().getAccount().getNumberCode())))
 
-                .andExpect(jsonPath("$.attributes.debtor_party.address",
+                .andExpect(jsonPath("$.payment.attributes.debtor_party.address",
                         is(payment.getAttributes().getParties().getDebtor().getAddress())))
 
-                .andExpect(jsonPath("$.attributes.debtor_party.bank_id",
+                .andExpect(jsonPath("$.payment.attributes.debtor_party.bank_id",
                         is(payment.getAttributes().getParties().getDebtor().getBank().getId())))
-                .andExpect(jsonPath("$.attributes.debtor_party.bank_id_code",
+                .andExpect(jsonPath("$.payment.attributes.debtor_party.bank_id_code",
                         is(payment.getAttributes().getParties().getDebtor().getBank().getIdCode())))
 
-                .andExpect(jsonPath("$.attributes.debtor_party.name",
+                .andExpect(jsonPath("$.payment.attributes.debtor_party.name",
                         is(payment.getAttributes().getParties().getDebtor().getName())))
 
                 // Sponsor party
-                .andExpect(jsonPath("$.attributes.sponsor_party.account_number",
+                .andExpect(jsonPath("$.payment.attributes.sponsor_party.account_number",
                         is(payment.getAttributes().getParties().getSponsor().getAccount().getNumber())))
-                .andExpect(jsonPath("$.attributes.sponsor_party.bank_id",
+                .andExpect(jsonPath("$.payment.attributes.sponsor_party.bank_id",
                         is(payment.getAttributes().getParties().getSponsor().getBank().getId())))
-                .andExpect(jsonPath("$.attributes.sponsor_party.bank_id_code",
+                .andExpect(jsonPath("$.payment.attributes.sponsor_party.bank_id_code",
                         is(payment.getAttributes().getParties().getSponsor().getBank().getIdCode())))
 
                 // Charges
-                .andExpect(jsonPath("$.attributes.charges_information.bearer_code",
+                .andExpect(jsonPath("$.payment.attributes.charges_information.bearer_code",
                         is(payment.getAttributes().getCharges().getBearerCode())))
-                .andExpect(jsonPath("$.attributes.charges_information.sender_charges[0].amount",
+                .andExpect(jsonPath("$.payment.attributes.charges_information.sender_charges[0].amount",
                         is(payment.getAttributes().getCharges().getSenderCharges().get(0).toString())))
-                .andExpect(jsonPath("$.attributes.charges_information.sender_charges[0].currency",
+                .andExpect(jsonPath("$.payment.attributes.charges_information.sender_charges[0].currency",
                         is(payment.getAttributes().getCharges().getSenderCharges().get(0).getCurrency().toString())))
-                .andExpect(jsonPath("$.attributes.charges_information.sender_charges[1].amount",
+                .andExpect(jsonPath("$.payment.attributes.charges_information.sender_charges[1].amount",
                         is(payment.getAttributes().getCharges().getSenderCharges().get(1).toString())))
-                .andExpect(jsonPath("$.attributes.charges_information.sender_charges[1].currency",
+                .andExpect(jsonPath("$.payment.attributes.charges_information.sender_charges[1].currency",
                         is(payment.getAttributes().getCharges().getSenderCharges().get(1).getCurrency().toString())))
-                .andExpect(jsonPath("$.attributes.charges_information.receiver_charges_amount",
+                .andExpect(jsonPath("$.payment.attributes.charges_information.receiver_charges_amount",
                         is(payment.getAttributes().getCharges().getReceiverCharges().toString())))
-                .andExpect(jsonPath("$.attributes.charges_information.receiver_charges_currency",
+                .andExpect(jsonPath("$.payment.attributes.charges_information.receiver_charges_currency",
                         is(payment.getAttributes().getCharges().getReceiverCharges().getCurrency().toString())))
 
                 // References
-                .andExpect(jsonPath("$.attributes.reference",
+                .andExpect(jsonPath("$.payment.attributes.reference",
                         is(payment.getAttributes().getReferences().getRoot())))
-                .andExpect(jsonPath("$.attributes.end_to_end_reference",
+                .andExpect(jsonPath("$.payment.attributes.end_to_end_reference",
                         is(payment.getAttributes().getReferences().getEndToEnd())))
-                .andExpect(jsonPath("$.attributes.numeric_reference",
+                .andExpect(jsonPath("$.payment.attributes.numeric_reference",
                         is(payment.getAttributes().getReferences().getNumeric())))
 
                 // Payment details
-                .andExpect(jsonPath("$.attributes.payment_id",
+                .andExpect(jsonPath("$.payment.attributes.payment_id",
                         is(payment.getAttributes().getPaymentDetails().getId())))
-                .andExpect(jsonPath("$.attributes.payment_purpose",
+                .andExpect(jsonPath("$.payment.attributes.payment_purpose",
                         is(payment.getAttributes().getPaymentDetails().getPurpose())))
-                .andExpect(jsonPath("$.attributes.payment_scheme",
+                .andExpect(jsonPath("$.payment.attributes.payment_scheme",
                         is(payment.getAttributes().getPaymentDetails().getScheme().toString())))
-                .andExpect(jsonPath("$.attributes.payment_type",
+                .andExpect(jsonPath("$.payment.attributes.payment_type",
                         is(payment.getAttributes().getPaymentDetails().getType().toString())))
 
-                .andExpect(jsonPath("$.attributes.processing_date",
+                .andExpect(jsonPath("$.payment.attributes.processing_date",
                         is(dateFormat.format(payment.getAttributes().getProcessingDate()))))
 
-                .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
+                .andExpect(jsonPath("$.payment.id", is(String.valueOf(payment.getId()))));
     }
 
     @Test
