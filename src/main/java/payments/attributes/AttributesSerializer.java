@@ -37,6 +37,11 @@ public class AttributesSerializer extends StdSerializer<Attributes> {
 
         gen.writeStringField("processing_date", dateFormat.format(value.getProcessingDate()));
 
+        gen.writeStringField("payment_id", value.getPaymentDetails().getId());
+        gen.writeStringField("payment_purpose", value.getPaymentDetails().getPurpose());
+        gen.writeStringField("payment_scheme", value.getPaymentDetails().getScheme().toString());
+        gen.writeStringField("payment_type", value.getPaymentDetails().getType().toString());
+
         gen.writeEndObject();
     }
 }

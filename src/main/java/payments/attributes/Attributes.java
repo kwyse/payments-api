@@ -3,6 +3,7 @@ package payments.attributes;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import payments.attributes.details.PaymentDetails;
 import payments.attributes.parties.Parties;
 
 import javax.persistence.Embeddable;
@@ -16,15 +17,17 @@ public class Attributes {
     private Parties parties;
     private References references;
     private Date processingDate;
+    private PaymentDetails paymentDetails;
 
     public Attributes() {
     }
 
-    public Attributes(Amount amount, Parties parties, References references, Date processingDate) {
+    public Attributes(Amount amount, Parties parties, References references, Date processingDate, PaymentDetails paymentDetails) {
         this.amount = amount;
         this.parties = parties;
         this.references = references;
         this.processingDate = processingDate;
+        this.paymentDetails = paymentDetails;
     }
 
     public Amount getAmount() {
@@ -41,5 +44,9 @@ public class Attributes {
 
     public Date getProcessingDate() {
         return processingDate;
+    }
+
+    public PaymentDetails getPaymentDetails() {
+        return paymentDetails;
     }
 }

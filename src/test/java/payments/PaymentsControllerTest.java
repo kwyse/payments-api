@@ -14,6 +14,9 @@ import payments.attributes.Amount;
 import payments.attributes.Attributes;
 import payments.attributes.Currency;
 import payments.attributes.References;
+import payments.attributes.details.PaymentDetails;
+import payments.attributes.details.PaymentDetailsScheme;
+import payments.attributes.details.PaymentDetailsType;
 import payments.attributes.parties.*;
 
 import static org.hamcrest.Matchers.is;
@@ -68,7 +71,8 @@ public class PaymentsControllerTest {
         Parties parties = new Parties(beneficiary, debtor, sponsor);
         References references = new References("rootRef", "e2eRef", "numRef");
         Date processingDate = new GregorianCalendar(2017, Calendar.JANUARY, 24).getTime();
-        Attributes attributes = new Attributes(amount, parties, references, processingDate);
+        PaymentDetails paymentDetails = new PaymentDetails("payId", "payPurpose", PaymentDetailsScheme.FPS, PaymentDetailsType.Credit);
+        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails);
         payment = new Payment(attributes);
 
         this.paymentsRepository.save(payment);
@@ -141,6 +145,16 @@ public class PaymentsControllerTest {
                         is(payment.getAttributes().getReferences().getEndToEnd())))
                 .andExpect(jsonPath("$.attributes.numeric_reference",
                         is(payment.getAttributes().getReferences().getNumeric())))
+
+                // Payment details
+                .andExpect(jsonPath("$.attributes.payment_id",
+                        is(payment.getAttributes().getPaymentDetails().getId())))
+                .andExpect(jsonPath("$.attributes.payment_purpose",
+                        is(payment.getAttributes().getPaymentDetails().getPurpose())))
+                .andExpect(jsonPath("$.attributes.payment_scheme",
+                        is(payment.getAttributes().getPaymentDetails().getScheme().toString())))
+                .andExpect(jsonPath("$.attributes.payment_type",
+                        is(payment.getAttributes().getPaymentDetails().getType().toString())))
 
                 .andExpect(jsonPath("$.attributes.processing_date",
                         is(dateFormat.format(payment.getAttributes().getProcessingDate()))))
