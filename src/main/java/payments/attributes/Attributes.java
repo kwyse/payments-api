@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import payments.attributes.parties.Parties;
 
 import javax.persistence.Embeddable;
+import java.util.Date;
 
 @Embeddable
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
@@ -14,14 +15,16 @@ public class Attributes {
     private Amount amount;
     private Parties parties;
     private References references;
+    private Date processingDate;
 
     public Attributes() {
     }
 
-    public Attributes(Amount amount, Parties parties, References references) {
+    public Attributes(Amount amount, Parties parties, References references, Date processingDate) {
         this.amount = amount;
         this.parties = parties;
         this.references = references;
+        this.processingDate = processingDate;
     }
 
     public Amount getAmount() {
@@ -34,5 +37,9 @@ public class Attributes {
 
     public References getReferences() {
         return references;
+    }
+
+    public Date getProcessingDate() {
+        return processingDate;
     }
 }

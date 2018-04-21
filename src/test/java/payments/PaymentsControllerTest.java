@@ -22,6 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -63,7 +67,8 @@ public class PaymentsControllerTest {
 
         Parties parties = new Parties(beneficiary, debtor, sponsor);
         References references = new References("rootRef", "e2eRef", "numRef");
-        Attributes attributes = new Attributes(amount, parties, references);
+        Date processingDate = new GregorianCalendar(2017, Calendar.JANUARY, 24).getTime();
+        Attributes attributes = new Attributes(amount, parties, references, processingDate);
         payment = new Payment(attributes);
 
         this.paymentsRepository.save(payment);
@@ -71,6 +76,8 @@ public class PaymentsControllerTest {
 
     @Test
     public void getSinglePayment() throws Exception {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         this.mockMvc.perform(get("/payments/" + this.payment.getId()))
                 .andExpect(status().isOk())
 
@@ -134,6 +141,9 @@ public class PaymentsControllerTest {
                         is(payment.getAttributes().getReferences().getEndToEnd())))
                 .andExpect(jsonPath("$.attributes.numeric_reference",
                         is(payment.getAttributes().getReferences().getNumeric())))
+
+                .andExpect(jsonPath("$.attributes.processing_date",
+                        is(dateFormat.format(payment.getAttributes().getProcessingDate()))))
 
                 .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
     }
