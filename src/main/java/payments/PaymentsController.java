@@ -48,4 +48,14 @@ public class PaymentsController {
 
         return ResponseEntity.created(URI.create(forOnePayment.getHref())).build();
     }
+
+    @RequestMapping(value = "/{paymentId}", method = RequestMethod.DELETE)
+    ResponseEntity deleteExistingPayment(@PathVariable UUID paymentId) {
+        try {
+            this.paymentsRepository.deleteById(paymentId);
+            return ResponseEntity.noContent().build();
+        } catch (Exception _exception) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

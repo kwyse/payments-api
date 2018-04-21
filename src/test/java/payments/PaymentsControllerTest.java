@@ -28,6 +28,7 @@ import payments.attributes.parties.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -200,6 +201,27 @@ public class PaymentsControllerTest {
                 .andExpect(status().isCreated());
 
         assertEquals(entityCount + 1, this.paymentsRepository.count());
+    }
+
+    @Test
+    public void deleteExistingPayment() throws Exception {
+        Payment payment = this.paymentsRepository.save(this.generatePayment());
+        long entityCount = this.paymentsRepository.count();
+
+        this.mockMvc.perform(delete("/payments/" + payment.getId()))
+                .andExpect(status().isNoContent());
+
+        assertEquals(entityCount - 1, this.paymentsRepository.count());
+    }
+
+    @Test
+    public void deleteNonExistingPayment() throws Exception {
+        long entityCount = this.paymentsRepository.count();
+
+        this.mockMvc.perform(delete("/payments/" + UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+
+        assertEquals(entityCount, this.paymentsRepository.count());
     }
 
     private String encodeToJson(Object o) throws IOException {
