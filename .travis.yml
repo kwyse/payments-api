@@ -6,7 +6,8 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-test:
-  post:
-    - gradle jacocoTestReport
-    - bash <(curl -s https://codecov.io/bash)
+script:
+  - gradle check
+  - gradle jacocoTestReport
+after_success:
+- bash <(curl -s https://codecov.io/bash)
