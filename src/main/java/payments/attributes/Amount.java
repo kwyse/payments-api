@@ -1,9 +1,12 @@
 package payments.attributes;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.Embeddable;
 import java.math.BigInteger;
 
 @Embeddable
+@JsonSerialize(using = AmountSerializer.class)
 public class Amount {
     private BigInteger majorUnits;
     private int minorUnits;
@@ -32,6 +35,6 @@ public class Amount {
 
     @Override
     public String toString() {
-        return String.format("%s.%2d", this.majorUnits.toString(), this.minorUnits);
+        return String.format("%s.%02d", this.majorUnits.toString(), this.minorUnits);
     }
 }

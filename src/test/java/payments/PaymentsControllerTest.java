@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import payments.attributes.Amount;
 import payments.attributes.Attributes;
+import payments.attributes.Charges;
+import payments.attributes.ChargesRepository;
 import payments.attributes.Currency;
 import payments.attributes.References;
 import payments.attributes.details.PaymentDetails;
@@ -26,9 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -40,6 +40,8 @@ public class PaymentsControllerTest {
     private PaymentsRepository paymentsRepository;
     @Autowired
     private PartyRepository partyRepository;
+    @Autowired
+    private ChargesRepository chargesRepository;
     @Autowired
     private WebApplicationContext context;
 
@@ -72,7 +74,16 @@ public class PaymentsControllerTest {
         References references = new References("rootRef", "e2eRef", "numRef");
         Date processingDate = new GregorianCalendar(2017, Calendar.JANUARY, 24).getTime();
         PaymentDetails paymentDetails = new PaymentDetails("payId", "payPurpose", PaymentDetailsScheme.FPS, PaymentDetailsType.Credit);
-        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails);
+
+        List<Amount> senderAmounts = Arrays.asList(
+                new Amount(BigInteger.valueOf(5), 0, Currency.GBP),
+                new Amount(BigInteger.valueOf(10), 0, Currency.GBP)
+        );
+        Amount receiverAmount = new Amount(BigInteger.valueOf(1), 0, Currency.GBP);
+        Charges charges = new Charges("bearerCode", senderAmounts, receiverAmount);
+        this.chargesRepository.save(charges);
+
+        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, charges);
         payment = new Payment(attributes);
 
         this.paymentsRepository.save(payment);
@@ -137,6 +148,22 @@ public class PaymentsControllerTest {
                         is(payment.getAttributes().getParties().getSponsor().getBank().getId())))
                 .andExpect(jsonPath("$.attributes.sponsor_party.bank_id_code",
                         is(payment.getAttributes().getParties().getSponsor().getBank().getIdCode())))
+
+                // Charges
+                .andExpect(jsonPath("$.attributes.charges_information.bearer_code",
+                        is(payment.getAttributes().getCharges().getBearerCode())))
+                .andExpect(jsonPath("$.attributes.charges_information.sender_charges[0].amount",
+                        is(payment.getAttributes().getCharges().getSenderCharges().get(0).toString())))
+                .andExpect(jsonPath("$.attributes.charges_information.sender_charges[0].currency",
+                        is(payment.getAttributes().getCharges().getSenderCharges().get(0).getCurrency().toString())))
+                .andExpect(jsonPath("$.attributes.charges_information.sender_charges[1].amount",
+                        is(payment.getAttributes().getCharges().getSenderCharges().get(1).toString())))
+                .andExpect(jsonPath("$.attributes.charges_information.sender_charges[1].currency",
+                        is(payment.getAttributes().getCharges().getSenderCharges().get(1).getCurrency().toString())))
+                .andExpect(jsonPath("$.attributes.charges_information.receiver_charges_amount",
+                        is(payment.getAttributes().getCharges().getReceiverCharges().toString())))
+                .andExpect(jsonPath("$.attributes.charges_information.receiver_charges_currency",
+                        is(payment.getAttributes().getCharges().getReceiverCharges().getCurrency().toString())))
 
                 // References
                 .andExpect(jsonPath("$.attributes.reference",

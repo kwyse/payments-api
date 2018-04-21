@@ -7,6 +7,7 @@ import payments.attributes.details.PaymentDetails;
 import payments.attributes.parties.Parties;
 
 import javax.persistence.Embeddable;
+import javax.persistence.OneToOne;
 import java.util.Date;
 
 @Embeddable
@@ -19,15 +20,19 @@ public class Attributes {
     private Date processingDate;
     private PaymentDetails paymentDetails;
 
+    @OneToOne
+    private Charges charges;
+
     public Attributes() {
     }
 
-    public Attributes(Amount amount, Parties parties, References references, Date processingDate, PaymentDetails paymentDetails) {
+    public Attributes(Amount amount, Parties parties, References references, Date processingDate, PaymentDetails paymentDetails, Charges charges) {
         this.amount = amount;
         this.parties = parties;
         this.references = references;
         this.processingDate = processingDate;
         this.paymentDetails = paymentDetails;
+        this.charges = charges;
     }
 
     public Amount getAmount() {
@@ -48,5 +53,9 @@ public class Attributes {
 
     public PaymentDetails getPaymentDetails() {
         return paymentDetails;
+    }
+
+    public Charges getCharges() {
+        return charges;
     }
 }
