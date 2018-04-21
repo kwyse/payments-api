@@ -90,7 +90,7 @@ public class PaymentsControllerTest {
     }
 
     @Test
-    public void getSinglePayment() throws Exception {
+    public void getSinglePaymentThatExists() throws Exception {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         this.mockMvc.perform(get("/payments/" + this.payment.getId()))
@@ -187,5 +187,11 @@ public class PaymentsControllerTest {
                         is(dateFormat.format(payment.getAttributes().getProcessingDate()))))
 
                 .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
+    }
+
+    @Test
+    public void getSinglePaymentThatDoesNotExist() throws Exception {
+        this.mockMvc.perform(get("/payments/" + UUID.randomUUID()))
+                .andExpect(status().isNotFound());
     }
 }
