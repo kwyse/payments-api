@@ -6,24 +6,22 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import payments.attributes.parties.Parties;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 
 @Embeddable
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonSerialize(using = AttributesSerializer.class)
 public class Attributes {
-    @Embedded
     private Amount amount;
-
-    @Embedded
     private Parties parties;
+    private References references;
 
     public Attributes() {
     }
 
-    public Attributes(Amount amount, Parties parties) {
+    public Attributes(Amount amount, Parties parties, References references) {
         this.amount = amount;
         this.parties = parties;
+        this.references = references;
     }
 
     public Amount getAmount() {
@@ -32,5 +30,9 @@ public class Attributes {
 
     public Parties getParties() {
         return parties;
+    }
+
+    public References getReferences() {
+        return references;
     }
 }

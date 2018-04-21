@@ -13,6 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 import payments.attributes.Amount;
 import payments.attributes.Attributes;
 import payments.attributes.Currency;
+import payments.attributes.References;
 import payments.attributes.parties.*;
 
 import static org.hamcrest.Matchers.is;
@@ -61,7 +62,8 @@ public class PaymentsControllerTest {
         this.partyRepository.save(sponsor);
 
         Parties parties = new Parties(beneficiary, debtor, sponsor);
-        Attributes attributes = new Attributes(amount, parties);
+        References references = new References("rootRef", "e2eRef", "numRef");
+        Attributes attributes = new Attributes(amount, parties, references);
         payment = new Payment(attributes);
 
         this.paymentsRepository.save(payment);
@@ -124,6 +126,14 @@ public class PaymentsControllerTest {
                         is(payment.getAttributes().getParties().getSponsor().getBank().getId())))
                 .andExpect(jsonPath("$.attributes.sponsor_party.bank_id_code",
                         is(payment.getAttributes().getParties().getSponsor().getBank().getIdCode())))
+
+                // References
+                .andExpect(jsonPath("$.attributes.reference",
+                        is(payment.getAttributes().getReferences().getRoot())))
+                .andExpect(jsonPath("$.attributes.end_to_end_reference",
+                        is(payment.getAttributes().getReferences().getEndToEnd())))
+                .andExpect(jsonPath("$.attributes.numeric_reference",
+                        is(payment.getAttributes().getReferences().getNumeric())))
 
                 .andExpect(jsonPath("$.id", is(String.valueOf(payment.getId()))));
     }
