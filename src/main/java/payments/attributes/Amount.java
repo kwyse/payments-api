@@ -16,9 +16,17 @@ public class Amount {
     }
 
     public Amount(BigInteger majorUnits, int minorUnits, Currency currency) {
+        if (majorUnits == null) majorUnits = BigInteger.ZERO;
+        this.currency = currency;
+
+        if (minorUnits > 99) {
+            long extraMajorUnits = Math.floorDiv(minorUnits, 100);
+            majorUnits = majorUnits.add(BigInteger.valueOf(extraMajorUnits));
+            minorUnits %= 100;
+        }
+
         this.majorUnits = majorUnits;
         this.minorUnits = minorUnits;
-        this.currency = currency;
     }
 
     public BigInteger getMajorUnits() {
@@ -35,6 +43,6 @@ public class Amount {
 
     @Override
     public String toString() {
-        return String.format("%s.%02d", this.majorUnits.toString(), this.minorUnits);
+        return String.format("%d.%02d", this.majorUnits, this.minorUnits);
     }
 }
