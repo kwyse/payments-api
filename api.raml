@@ -1,0 +1,255 @@
+#%RAML 1.0
+---
+title: Payments API
+baseUri: http://localhost/
+version: v1
+
+/payments:
+
+  get:
+    description: Retrieve all payment resources
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "links":[
+                  {
+                    "rel":"self",
+                    "href":"http://localhost/payments",
+                    "hreflang":null,
+                    "media":null,
+                    "title":null,
+                    "type":null,
+                    "deprecation":null
+                  }
+                ],
+                "content":[
+                  {
+                    "payment":{
+                      "id":"4e4acddb-0c91-4906-93f1-14899da30761",
+                      "organisation_id":"5ccd69aa-04f6-4669-9a33-35b6506d9c8e",
+                      "version":42,
+                      "type":"Payment",
+                      "attributes":{
+                        "amount":"2.56",
+                        "currency":"GBP",
+                        "beneficiary_party":{
+                          "account_name":"F Last",
+                          "account_number":"accNum",
+                          "account_number_code":"accCode",
+                          "account_type":42,
+                          "address":"42 Main St London EC42 G4D",
+                          "bank_id":"beneficiaryBankId",
+                          "bank_id_code":"beneficiaryBankIdCode",
+                          "name":"First Middle Last"
+                        },
+                        "debtor_party":{
+                          "account_name":"debtorName",
+                          "account_number":"debtorAccNum",
+                          "account_number_code":"debtorCode",
+                          "account_type":0,
+                          "address":"111 The Circle",
+                          "bank_id":"debtorBankId",
+                          "bank_id_code":"debtorBankIdCode",
+                          "name":"Debt Name"
+                        },
+                        "sponsor_party":{
+                          "account_name":null,
+                          "account_number":"sponsorAccNum",
+                          "account_number_code":null,
+                          "account_type":0,
+                          "address":null,
+                          "bank_id":"sponsorBankId",
+                          "bank_id_code":"sponsorBankIdCode",
+                          "name":null
+                        },
+                        "reference":"rootRef",
+                        "end_to_end_reference":"e2eRef",
+                        "numeric_reference":"numRef",
+                        "processing_date":"2017-01-24",
+                        "payment_id":"payId",
+                        "payment_purpose":"payPurpose",
+                        "payment_scheme":"FPS",
+                        "payment_type":"Credit",
+                        "charges_information":{
+                          "bearer_code":"bearerCode",
+                          "sender_charges":[
+                            {
+                              "amount":"5.10",
+                              "currency":"GBP"
+                            },
+                            {
+                              "amount":"10.20",
+                              "currency":"GBP"
+                            }
+                          ],
+                          "receiver_charges_amount":"1.30",
+                          "receiver_charges_currency":"GBP"
+                        },
+                        "fx":{
+                          "contract_reference":"contractRef",
+                          "exchange_rate":"2.00000",
+                          "original_amount":"200.42",
+                          "original_currency":"GBP"
+                        },
+                        "scheme_payment_type":"ImmediatePayment",
+                        "scheme_payment_sub_type":"InternetBanking"
+                      }
+                    },
+                    "links":[
+                      {
+                        "rel":"self",
+                        "href":"http://localhost/payments/4e4acddb-0c91-4906-93f1-14899da30761",
+                        "hreflang":null,
+                        "media":null,
+                        "title":null,
+                        "type":null,
+                        "deprecation":null
+                      }
+                    ]
+                  }
+                ]
+              }
+
+  post:
+    description: Add a new payment resource
+    responses:
+      201:
+        body:
+          application/json:
+            example: |
+              {"message": "payment successfully created"}
+
+  /{paymentId}:
+
+    get:
+      description: Retrieve a specific payment resource
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "payment":{
+                    "id":"4e4acddb-0c91-4906-93f1-14899da30761",
+                    "organisation_id":"5ccd69aa-04f6-4669-9a33-35b6506d9c8e",
+                    "version":42,
+                    "type":"Payment",
+                    "attributes":{
+                      "amount":"2.56",
+                      "currency":"GBP",
+                      "beneficiary_party":{
+                        "account_name":"F Last",
+                        "account_number":"accNum",
+                        "account_number_code":"accCode",
+                        "account_type":42,
+                        "address":"42 Main St London EC42 G4D",
+                        "bank_id":"beneficiaryBankId",
+                        "bank_id_code":"beneficiaryBankIdCode",
+                        "name":"First Middle Last"
+                      },
+                      "debtor_party":{
+                        "account_name":"debtorName",
+                        "account_number":"debtorAccNum",
+                        "account_number_code":"debtorCode",
+                        "account_type":0,
+                        "address":"111 The Circle",
+                        "bank_id":"debtorBankId",
+                        "bank_id_code":"debtorBankIdCode",
+                        "name":"Debt Name"
+                      },
+                      "sponsor_party":{
+                        "account_name":null,
+                        "account_number":"sponsorAccNum",
+                        "account_number_code":null,
+                        "account_type":0,
+                        "address":null,
+                        "bank_id":"sponsorBankId",
+                        "bank_id_code":"sponsorBankIdCode",
+                        "name":null
+                      },
+                      "reference":"rootRef",
+                      "end_to_end_reference":"e2eRef",
+                      "numeric_reference":"numRef",
+                      "processing_date":"2017-01-24",
+                      "payment_id":"payId",
+                      "payment_purpose":"payPurpose",
+                      "payment_scheme":"FPS",
+                      "payment_type":"Credit",
+                      "charges_information":{
+                        "bearer_code":"bearerCode",
+                        "sender_charges":[
+                          {
+                            "amount":"5.10",
+                            "currency":"GBP"
+                          },
+                          {
+                            "amount":"10.20",
+                            "currency":"GBP"
+                          }
+                        ],
+                        "receiver_charges_amount":"1.30",
+                        "receiver_charges_currency":"GBP"
+                      },
+                      "fx":{
+                        "contract_reference":"contractRef",
+                        "exchange_rate":"2.00000",
+                        "original_amount":"200.42",
+                        "original_currency":"GBP"
+                      },
+                      "scheme_payment_type":"ImmediatePayment",
+                      "scheme_payment_sub_type":"InternetBanking"
+                    }
+                  },
+                  "links":[
+                    {
+                      "rel":"self",
+                      "href":"http://localhost/payments/4e4acddb-0c91-4906-93f1-14899da30761",
+                      "hreflang":null,
+                      "media":null,
+                      "title":null,
+                      "type":null,
+                      "deprecation":null
+                    }
+                  ]
+                }
+        404:
+          body:
+            application/json:
+              example: |
+                {"message": "payment not found"}
+
+    put:
+      description: Updates an existing payment resource
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {"message": "payment successfully updated"}
+        400:
+          body:
+            application/json:
+              example: |
+                {"message": "payment ID in path does not match payment ID in JSON payload"}
+        404:
+          body:
+            application/json:
+              example: |
+                {"message": "payment not found"}
+
+    delete:
+      description: Deletes an existing payment resource
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {"message": "payment successfully deleted"}
+        404:
+          body:
+            application/json:
+              example: |
+                {"message": "payment not found"}
