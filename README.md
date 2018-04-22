@@ -12,6 +12,10 @@
 $ gradle build
 ```
 
+## Design
+
+![Original API design](original_api_design.png)
+
 ## Assumptions
 
 ### Payment updates supply the full Payment object
