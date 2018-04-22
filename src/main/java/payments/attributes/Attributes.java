@@ -21,17 +21,21 @@ public class Attributes {
     private PaymentDetails paymentDetails;
 
     @OneToOne
+    private ForeignExchange foreignExchange;
+
+    @OneToOne
     private Charges charges;
 
     public Attributes() {
     }
 
-    public Attributes(Amount amount, Parties parties, References references, Date processingDate, PaymentDetails paymentDetails, Charges charges) {
+    public Attributes(Amount amount, Parties parties, References references, Date processingDate, PaymentDetails paymentDetails, ForeignExchange foreignExchange, Charges charges) {
         this.amount = amount;
         this.parties = parties;
         this.references = references;
         this.processingDate = processingDate;
         this.paymentDetails = paymentDetails;
+        this.foreignExchange = foreignExchange;
         this.charges = charges;
     }
 
@@ -57,5 +61,9 @@ public class Attributes {
 
     public Charges getCharges() {
         return charges;
+    }
+
+    public ForeignExchange getForeignExchange() {
+        return foreignExchange;
     }
 }

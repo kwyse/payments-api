@@ -14,12 +14,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import payments.attributes.Amount;
-import payments.attributes.Attributes;
-import payments.attributes.Charges;
-import payments.attributes.ChargesRepository;
+import payments.attributes.*;
 import payments.attributes.Currency;
-import payments.attributes.References;
 import payments.attributes.details.PaymentDetails;
 import payments.attributes.details.PaymentDetailsScheme;
 import payments.attributes.details.PaymentDetailsType;
@@ -49,6 +45,8 @@ public class PaymentsControllerTest {
     private PartyRepository partyRepository;
     @Autowired
     private ChargesRepository chargesRepository;
+    @Autowired
+    private ForeignExchangeRepository foreignExchangeRepository;
     @Autowired
     private WebApplicationContext context;
 
@@ -168,6 +166,16 @@ public class PaymentsControllerTest {
                 .andExpect(jsonPath("$.payment.attributes.payment_type",
                         is(payment.getAttributes().getPaymentDetails().getType().toString())))
 
+                // Foreign Exchange
+                .andExpect(jsonPath("$.payment.attributes.fx.contract_reference",
+                        is(payment.getAttributes().getForeignExchange().getContractReference())))
+                .andExpect(jsonPath("$.payment.attributes.fx.exchange_rate",
+                        is(payment.getAttributes().getForeignExchange().getExchangeRateAsString())))
+                .andExpect(jsonPath("$.payment.attributes.fx.original_amount",
+                        is(payment.getAttributes().getForeignExchange().getOriginalAmount().toString())))
+                .andExpect(jsonPath("$.payment.attributes.fx.original_currency",
+                        is(payment.getAttributes().getForeignExchange().getOriginalAmount().getCurrency().toString())))
+
                 .andExpect(jsonPath("$.payment.attributes.processing_date",
                         is(dateFormat.format(payment.getAttributes().getProcessingDate()))))
 
@@ -278,7 +286,10 @@ public class PaymentsControllerTest {
         Charges charges = new Charges("bearerCode", senderAmounts, receiverAmount);
         this.chargesRepository.save(charges);
 
-        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, charges);
+        ForeignExchange foreignExchange = new ForeignExchange("contractRef", 2.0, new Amount(BigInteger.valueOf(200), 42, Currency.GBP));
+        this.foreignExchangeRepository.save(foreignExchange);
+
+        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, foreignExchange, charges);
         return new Payment(attributes, UUID.randomUUID());
     }
 }
