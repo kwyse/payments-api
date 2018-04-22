@@ -28,9 +28,7 @@ import payments.attributes.parties.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -204,6 +202,23 @@ public class PaymentsControllerTest {
     }
 
     @Test
+    public void updateExistingPayment() throws Exception {
+        Payment payment = this.paymentsRepository.save(this.generatePayment());
+
+        payment.setOrganisationId(UUID.randomUUID());
+        String paymentJson = this.encodeToJson(payment);
+
+        this.mockMvc.perform(put("/payments/" + payment.getId()).contentType(this.contentType).content(paymentJson))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void updateNonExistingPayment() throws Exception {
+        this.mockMvc.perform(put("/payments/" + UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void deleteExistingPayment() throws Exception {
         Payment payment = this.paymentsRepository.save(this.generatePayment());
         long entityCount = this.paymentsRepository.count();
@@ -264,6 +279,6 @@ public class PaymentsControllerTest {
         this.chargesRepository.save(charges);
 
         Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, charges);
-        return new Payment(attributes);
+        return new Payment(attributes, UUID.randomUUID());
     }
 }

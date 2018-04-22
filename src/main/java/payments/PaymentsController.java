@@ -43,10 +43,24 @@ public class PaymentsController {
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity createNewPayment(@ModelAttribute Payment input) {
-        Payment payment = this.paymentsRepository.save(input);
+        Payment payment = this.paymentsRepository.saveAndFlush(input);
         Link forOnePayment = new PaymentResource(payment).getLink("self");
 
         return ResponseEntity.created(URI.create(forOnePayment.getHref())).build();
+    }
+
+    @RequestMapping(value = "/{paymentId}", method = RequestMethod.PUT)
+    ResponseEntity updateExistingPayment(@PathVariable UUID paymentId, @ModelAttribute Payment input) {
+        if (input.getId() != null && paymentId != input.getId()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (this.paymentsRepository.findById(paymentId).isPresent()) {
+            this.paymentsRepository.saveAndFlush(input);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @RequestMapping(value = "/{paymentId}", method = RequestMethod.DELETE)
