@@ -26,7 +26,7 @@ matches this, but some abstractions are still to be done like a separate
 
 ![Original API design](docs/original_api_design.png)
 
-There is also the [API specification](http://htmlpreview.github.io/?https://github.com/kwyse/payments-api/blob/master/api_specification.html).
+There is also the [API specification](https://kwyse.github.io/payments-api/).
 The current implementation also closely matches this, but needs a more
 enhancements such as returned JSON payloads.
 
