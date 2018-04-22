@@ -17,6 +17,7 @@ public class Payment {
     @GeneratedValue
     private UUID id;
     private UUID organisationId;
+    private int version;
 
     @Embedded
     private Attributes attributes;
@@ -24,12 +25,9 @@ public class Payment {
     public Payment() {
     }
 
-    Payment(Attributes attributes) {
-        this.attributes = attributes;
-    }
-
-    public Payment(Attributes attributes, UUID organisationId) {
+    public Payment(UUID organisationId, int version, Attributes attributes) {
         this.organisationId = organisationId;
+        this.version = version;
         this.attributes = attributes;
     }
 
@@ -43,6 +41,10 @@ public class Payment {
 
     public UUID getOrganisationId() {
         return organisationId;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     public void setOrganisationId(UUID organisationId) {
