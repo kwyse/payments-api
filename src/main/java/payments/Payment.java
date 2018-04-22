@@ -18,6 +18,7 @@ public class Payment {
     private UUID id;
     private UUID organisationId;
     private int version;
+    private PaymentType type;
 
     @Embedded
     private Attributes attributes;
@@ -25,9 +26,10 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(UUID organisationId, int version, Attributes attributes) {
+    public Payment(UUID organisationId, int version, PaymentType type, Attributes attributes) {
         this.organisationId = organisationId;
         this.version = version;
+        this.type = type;
         this.attributes = attributes;
     }
 
@@ -45,6 +47,10 @@ public class Payment {
 
     public int getVersion() {
         return version;
+    }
+
+    public PaymentType getType() {
+        return type;
     }
 
     public void setOrganisationId(UUID organisationId) {

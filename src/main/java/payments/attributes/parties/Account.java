@@ -11,7 +11,7 @@ public class Account {
     private String number;
     @Column(name = "account_number_code")
     private String numberCode;
-    @Column(name = "type")
+    @Column(name = "account_type")
     private int type;
 
     public Account() {

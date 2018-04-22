@@ -190,6 +190,7 @@ public class PaymentsControllerTest {
 
                 .andExpect(jsonPath("$.payment.id", is(this.payment.getId().toString())))
                 .andExpect(jsonPath("$.payment.version", is(this.payment.getVersion())))
+                .andExpect(jsonPath("$.payment.type", is(this.payment.getType().toString())))
                 .andExpect(jsonPath("$.links[0].href", containsString("/payments/" + this.payment.getId())));
     }
 
@@ -302,6 +303,6 @@ public class PaymentsControllerTest {
         SchemePayment schemePayment = new SchemePayment(SchemePaymentType.ImmediatePayment, SchemePaymentSubtype.InternetBanking);
 
         Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, schemePayment, foreignExchange, charges);
-        return new Payment(UUID.randomUUID(), 42, attributes);
+        return new Payment(UUID.randomUUID(), 42, PaymentType.Payment, attributes);
     }
 }
