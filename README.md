@@ -8,13 +8,27 @@
 
 ## Getting Started
 
+The project runs against Gradle 4.6 and JDK 10.
+
 ```bash
+# To build and run the tests
 $ gradle build
+
+# To launch the server locally
+$ java -jar build/libs/payments-api.jar
 ```
 
 ## Design
 
+This was the original design of the system. The current implementation closely
+matches this, but some abstractions are still to be done like a separate
+`Address` entity.
+
 ![Original API design](original_api_design.png)
+
+There is also the [API specification](http://htmlpreview.github.io/?https://github.com/kwyse/payments-api/blob/master/api_specification.html).
+The current implementation also closely matches this, but needs a more
+enhancements such as returned JSON payloads.
 
 ## Assumptions
 
@@ -41,3 +55,8 @@ with indexes have an overhead when persisting them, so they should be limited
 to fields that actually need to be queried in this manner. Only entity IDs have
 been implemented to fit this criteria, but the API can be extended to support
 more.
+
+### Future enhancements
+
+Error handling can be improved. Much has been left to Spring's default error
+handling. The chosen approach would depend on how consumers of the API behave.
