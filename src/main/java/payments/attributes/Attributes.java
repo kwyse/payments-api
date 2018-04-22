@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import payments.attributes.details.PaymentDetails;
 import payments.attributes.parties.Parties;
+import payments.attributes.scheme.SchemePayment;
 
 import javax.persistence.Embeddable;
 import javax.persistence.OneToOne;
@@ -19,6 +20,7 @@ public class Attributes {
     private References references;
     private Date processingDate;
     private PaymentDetails paymentDetails;
+    private SchemePayment schemePayment;
 
     @OneToOne
     private ForeignExchange foreignExchange;
@@ -29,12 +31,13 @@ public class Attributes {
     public Attributes() {
     }
 
-    public Attributes(Amount amount, Parties parties, References references, Date processingDate, PaymentDetails paymentDetails, ForeignExchange foreignExchange, Charges charges) {
+    public Attributes(Amount amount, Parties parties, References references, Date processingDate, PaymentDetails paymentDetails, SchemePayment schemePayment, ForeignExchange foreignExchange, Charges charges) {
         this.amount = amount;
         this.parties = parties;
         this.references = references;
         this.processingDate = processingDate;
         this.paymentDetails = paymentDetails;
+        this.schemePayment = schemePayment;
         this.foreignExchange = foreignExchange;
         this.charges = charges;
     }
@@ -65,5 +68,9 @@ public class Attributes {
 
     public ForeignExchange getForeignExchange() {
         return foreignExchange;
+    }
+
+    public SchemePayment getSchemePayment() {
+        return schemePayment;
     }
 }

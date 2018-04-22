@@ -46,6 +46,9 @@ public class AttributesSerializer extends StdSerializer<Attributes> {
 
         gen.writeObjectField("fx", value.getForeignExchange());
 
+        gen.writeStringField("scheme_payment_type", value.getSchemePayment().getType().toString());
+        gen.writeStringField("scheme_payment_sub_type", value.getSchemePayment().getSubtype().toString());
+
         gen.writeEndObject();
     }
 }

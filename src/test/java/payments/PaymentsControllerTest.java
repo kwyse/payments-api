@@ -20,6 +20,9 @@ import payments.attributes.details.PaymentDetails;
 import payments.attributes.details.PaymentDetailsScheme;
 import payments.attributes.details.PaymentDetailsType;
 import payments.attributes.parties.*;
+import payments.attributes.scheme.SchemePayment;
+import payments.attributes.scheme.SchemePaymentSubtype;
+import payments.attributes.scheme.SchemePaymentType;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -176,6 +179,12 @@ public class PaymentsControllerTest {
                 .andExpect(jsonPath("$.payment.attributes.fx.original_currency",
                         is(payment.getAttributes().getForeignExchange().getOriginalAmount().getCurrency().toString())))
 
+                // Scheme Payment
+                .andExpect(jsonPath("$.payment.attributes.scheme_payment_type",
+                        is(payment.getAttributes().getSchemePayment().getType().toString())))
+                .andExpect(jsonPath("$.payment.attributes.scheme_payment_sub_type",
+                        is(payment.getAttributes().getSchemePayment().getSubtype().toString())))
+
                 .andExpect(jsonPath("$.payment.attributes.processing_date",
                         is(dateFormat.format(payment.getAttributes().getProcessingDate()))))
 
@@ -289,7 +298,9 @@ public class PaymentsControllerTest {
         ForeignExchange foreignExchange = new ForeignExchange("contractRef", 2.0, new Amount(BigInteger.valueOf(200), 42, Currency.GBP));
         this.foreignExchangeRepository.save(foreignExchange);
 
-        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, foreignExchange, charges);
+        SchemePayment schemePayment = new SchemePayment(SchemePaymentType.ImmediatePayment, SchemePaymentSubtype.InternetBanking);
+
+        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, schemePayment, foreignExchange, charges);
         return new Payment(attributes, UUID.randomUUID());
     }
 }
