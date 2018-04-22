@@ -231,7 +231,7 @@ public class PaymentsControllerTest {
         String paymentJson = this.encodeToJson(payment);
 
         this.mockMvc.perform(put("/payments/" + payment.getId()).contentType(this.contentType).content(paymentJson))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -246,7 +246,7 @@ public class PaymentsControllerTest {
         long entityCount = this.paymentsRepository.count();
 
         this.mockMvc.perform(delete("/payments/" + payment.getId()))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
 
         assertEquals(entityCount - 1, this.paymentsRepository.count());
     }

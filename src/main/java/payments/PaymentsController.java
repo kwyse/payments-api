@@ -57,7 +57,7 @@ public class PaymentsController {
 
         if (this.paymentsRepository.findById(paymentId).isPresent()) {
             this.paymentsRepository.saveAndFlush(input);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -67,7 +67,7 @@ public class PaymentsController {
     ResponseEntity deleteExistingPayment(@PathVariable UUID paymentId) {
         try {
             this.paymentsRepository.deleteById(paymentId);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         } catch (Exception _exception) {
             return ResponseEntity.notFound().build();
         }
