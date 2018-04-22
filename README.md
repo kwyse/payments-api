@@ -24,7 +24,7 @@ This was the original design of the system. The current implementation closely
 matches this, but some abstractions are still to be done like a separate
 `Address` entity.
 
-![Original API design](original_api_design.png)
+![Original API design](docs/original_api_design.png)
 
 There is also the [API specification](http://htmlpreview.github.io/?https://github.com/kwyse/payments-api/blob/master/api_specification.html).
 The current implementation also closely matches this, but needs a more
