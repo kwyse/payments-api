@@ -1,6 +1,7 @@
-package payments.attributes;
+package payments.attributes.amount.fx;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import payments.attributes.amount.Amount;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

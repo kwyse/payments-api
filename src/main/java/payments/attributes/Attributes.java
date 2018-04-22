@@ -3,6 +3,8 @@ package payments.attributes;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import payments.attributes.amount.Amount;
+import payments.attributes.amount.fx.ForeignExchange;
 import payments.attributes.details.PaymentDetails;
 import payments.attributes.parties.Parties;
 import payments.attributes.scheme.SchemePayment;

@@ -1,6 +1,7 @@
-package payments.attributes;
+package payments.attributes.amount.fx;
 
 import org.junit.Test;
+import payments.attributes.amount.Amount;
 
 import static org.junit.Assert.*;
 

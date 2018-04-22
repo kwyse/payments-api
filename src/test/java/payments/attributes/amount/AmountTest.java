@@ -1,4 +1,4 @@
-package payments.attributes;
+package payments.attributes.amount;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package payments.attributes;
+package payments.attributes.amount.fx;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

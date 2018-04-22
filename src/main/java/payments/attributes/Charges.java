@@ -3,6 +3,7 @@ package payments.attributes;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import payments.attributes.amount.Amount;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
