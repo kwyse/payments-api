@@ -305,7 +305,17 @@ public class PaymentsControllerTest {
 
         SchemePayment schemePayment = new SchemePayment(SchemePaymentType.ImmediatePayment, SchemePaymentSubtype.InternetBanking);
 
-        Attributes attributes = new Attributes(amount, parties, references, processingDate, paymentDetails, schemePayment, foreignExchange, charges);
+        Attributes attributes = new AttributesBuilder()
+                .withAmount(amount)
+                .withCharges(charges)
+                .withForeignExchange(foreignExchange)
+                .withParties(parties)
+                .withPaymentDetails(paymentDetails)
+                .withProcessingDate(processingDate)
+                .withReferences(references)
+                .withSchemePayment(schemePayment)
+                .build();
+
         return new Payment(UUID.randomUUID(), 42, PaymentType.Payment, attributes);
     }
 }

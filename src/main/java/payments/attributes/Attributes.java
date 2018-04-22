@@ -33,17 +33,6 @@ public class Attributes {
     public Attributes() {
     }
 
-    public Attributes(Amount amount, Parties parties, References references, Date processingDate, PaymentDetails paymentDetails, SchemePayment schemePayment, ForeignExchange foreignExchange, Charges charges) {
-        this.amount = amount;
-        this.parties = parties;
-        this.references = references;
-        this.processingDate = processingDate;
-        this.paymentDetails = paymentDetails;
-        this.schemePayment = schemePayment;
-        this.foreignExchange = foreignExchange;
-        this.charges = charges;
-    }
-
     public Amount getAmount() {
         return amount;
     }
@@ -74,5 +63,37 @@ public class Attributes {
 
     public SchemePayment getSchemePayment() {
         return schemePayment;
+    }
+
+    void setAmount(Amount amount) {
+        this.amount = amount;
+    }
+
+    void setParties(Parties parties) {
+        this.parties = parties;
+    }
+
+    void setReferences(References references) {
+        this.references = references;
+    }
+
+    void setProcessingDate(Date processingDate) {
+        this.processingDate = processingDate;
+    }
+
+    void setPaymentDetails(PaymentDetails paymentDetails) {
+        this.paymentDetails = paymentDetails;
+    }
+
+    void setSchemePayment(SchemePayment schemePayment) {
+        this.schemePayment = schemePayment;
+    }
+
+    void setForeignExchange(ForeignExchange foreignExchange) {
+        this.foreignExchange = foreignExchange;
+    }
+
+    void setCharges(Charges charges) {
+        this.charges = charges;
     }
 }
